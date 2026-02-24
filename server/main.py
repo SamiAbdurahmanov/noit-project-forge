@@ -44,25 +44,35 @@ from models import ProgressSnapshot
 from datetime import datetime, timedelta
 import json
 import hashlib
+import os
 
 # ─── App lifespan ─────────────────────────────────────────────────────────────
+ENVIRONMENT = os.getenv("ENVIRONMENT", "development")
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
-    yield
-    await engine.dispose()
+# In production, FRONTEND_URL should be your Vercel URL
+# Example: https://your-app.vercel.app
 
+app = FastAPI()
 
-app = FastAPI(lifespan=lifespan)
+# CORS configuration
+allowed_origins = [
+    "http://localhost:3000",  # Development
+    FRONTEND_URL,  # Production
+]
+
+# If FRONTEND_URL has multiple deployment URLs (preview branches), add them
+if ENVIRONMENT == "production":
+    # Add your Vercel domain pattern
+    allowed_origins.append("https://*.vercel.app")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=allowed_origins,
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_headers=["Content-Type", "Authorization", "Cookie", "Set-Cookie"],
+    expose_headers=["Set-Cookie"],
 )
 
 
