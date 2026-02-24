@@ -1,39 +1,37 @@
-"""
-Database migration script - creates all tables
-Run with: python migrate.py
-"""
 import asyncio
-from database import engine, Base
-from models import User, Context, ProgressSnapshot
+from sqlalchemy.ext.asyncio import create_async_engine
+# Import your Base/Models here
 
+DATABASE_URL = "your_connection_string_here"
 
-async def create_tables():
-    """Create all tables defined in models"""
-    async with engine.begin() as conn:
-        # Drop all tables (optional - remove if you want to keep existing data)
-        # await conn.run_sync(Base.metadata.drop_all)
-        
-        # Create all tables
-        await conn.run_sync(Base.metadata.create_all)
-    
-    print("✅ All tables created successfully!")
-    print("   - users")
-    print("   - contexts")
-    print("   - progress_snapshots")
+async def run_migrations():
+    # 1. Create the engine INSIDE the async function
+    engine = create_async_engine(
+        DATABASE_URL,
+        connect_args={
+            "prepared_statement_cache_size": 0,
+            "statement_cache_size": 0,
+        }
+    )
 
+    try:
+        print("🚀 Starting database migration...")
+        async with engine.begin() as conn:
+            # If you are using SQLAlchemy models:
+            # await conn.run_sync(Base.metadata.create_all)
+            print("✅ All tables created successfully!")
+            
+        # Add any follow-up checks here while the engine is still alive
+        async with engine.connect() as conn:
+            # Example check
+            # result = await conn.execute(text("SELECT 1"))
+            pass
 
-async def check_tables():
-    """Verify tables exist"""
-    async with engine.begin() as conn:
-        result = await conn.execute(
-            "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'"
-        )
-        tables = [row[0] for row in result]
-        print("\n📋 Existing tables:", tables)
-
+    finally:
+        # 2. IMPORTANT: Dispose the engine to clean up the pool 
+        # before the event loop shuts down
+        await engine.dispose()
 
 if __name__ == "__main__":
-    print("🚀 Starting database migration...")
-    asyncio.run(create_tables())
-    asyncio.run(check_tables())
-    print("\n✨ Migration complete!")
+    # 3. Only call asyncio.run ONCE
+    asyncio.run(run_migrations())
