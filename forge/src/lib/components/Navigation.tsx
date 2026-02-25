@@ -4,14 +4,14 @@ import Link from "next/link";
 import { Flame, Sparkles, Menu, X, ArrowRight } from "lucide-react";
 import { useUser } from "@/context/UserContext";
 import { useRouter } from "next/navigation";
-
+const API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 export default function Navigation() {
     const [isOpen, setIsOpen] = useState(false);
     const { user } = useUser();
     const router = useRouter();
     const handleLogout = async (e: React.FormEvent) => {
         e.preventDefault();
-        await fetch("http://localhost:8000/auth/logout", {
+        await fetch(`${API}/auth/logout`, {
             method: "POST",
             credentials: "include",
         });

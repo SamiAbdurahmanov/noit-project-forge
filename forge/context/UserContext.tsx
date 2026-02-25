@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect, ReactNode, Dispatch, SetStateAction } from "react";
-
+const API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 interface User {
   email: string;
 }
@@ -25,7 +25,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await fetch("http://localhost:8000/protected", {
+        const res = await fetch(`${API}/protected`, {
           credentials: "include",
         });
 

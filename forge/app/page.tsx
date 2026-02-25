@@ -5,7 +5,7 @@ import { useUser } from '@/context/UserContext';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import LoadingScreen from '@/src/lib/components/LoadingScreen';
-
+const API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 export default function ForgeLanding() {
   const [isHovering, setIsHovering] = useState(false);
   const { user, isLoading } = useUser();
@@ -29,7 +29,7 @@ export default function ForgeLanding() {
 
     async function checkContexts() {
       try {
-        const res = await fetch("http://localhost:8000/context/my-contexts", {
+        const res = await fetch(`${API}/context/my-contexts`, {
           credentials: "include",
         });
 

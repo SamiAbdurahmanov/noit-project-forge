@@ -9,6 +9,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { withAuth } from "@/src/withAuth";
 
+const API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 type SubmitError = {
     type: "validation" | "network" | "server";
     message: string;
@@ -74,7 +75,7 @@ export default function ForgeNewContextPage() {
         setLoading(true);
 
         try {
-            const res = await fetch("http://localhost:8000/context/create", {
+            const res = await fetch(`${API}/context/create`, {
                 method: "POST",
                 credentials: "include",
                 headers: {
@@ -126,7 +127,7 @@ export default function ForgeNewContextPage() {
         setLoading(true);
         setButtonDisabled(true);
         try {
-            const res = await fetch("http://localhost:8000/context/confirm", {
+            const res = await fetch(`${API}/context/confirm`, {
                 method: "POST",
                 credentials: "include",
                 headers: {

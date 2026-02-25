@@ -3,6 +3,9 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import GuestOnly from "@/src/lib/components/GuestOnly";
 
+
+const API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+
 export default function AuthPage() {
     const [activeButton, setActiveButton] = useState<"signup" | "signin">("signup");
     const [formRegisterData, setFormRegisterData] = useState({ email: "", password: "", confirmPassword: "" });
@@ -122,7 +125,7 @@ export default function AuthPage() {
         if (!validateSignUpForm()) return;
 
         try {
-            const res = await fetch("http://localhost:8000/auth/register", {
+            const res = await fetch(`${API}/auth/register`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -158,7 +161,7 @@ export default function AuthPage() {
         if (!validateSignInForm()) return;
 
         try {
-            const res = await fetch("http://localhost:8000/auth/login", {
+            const res = await fetch(`${API}/auth/login`, {
                 method: "POST",
                 body: JSON.stringify({ 
                     email: formLoginData.email, 
