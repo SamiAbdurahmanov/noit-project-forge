@@ -137,9 +137,11 @@ async def login_user(user: UserLogin, db: AsyncSession = Depends(get_db)):
 
 
 @app.post("/auth/logout")
-def logout(response: Response):
-    is_production = ENVIRONMENT == "production"
+def logout_alt():
     
+    is_production = os.getenv("ENVIRONMENT") == "production"
+    
+    response = JSONResponse({"message": "Logout successful"})
     response.delete_cookie(
         key="access_token",
         secure=is_production,
@@ -147,9 +149,7 @@ def logout(response: Response):
         httponly=True,
     )
     
-    return {"message": "Logout successful"}
-
-
+    return response
 @app.get("/protected")
 def protected_route(user=Depends(get_current_user)):
     return {"message": f"Welcome {user['email']}!"}
