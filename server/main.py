@@ -52,29 +52,25 @@ FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
 
 # In production, FRONTEND_URL should be your Vercel URL
 # Example: https://your-app.vercel.app
-
+#https://noit-project-forge-production.up.railway.app/
 app = FastAPI()
 
-# CORS configuration
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
+
 allowed_origins = [
     "http://localhost:3000",  # Development
-    FRONTEND_URL,  # Production
+    FRONTEND_URL,  # Production Vercel URL
+    "https://*.vercel.app",  # Allow Vercel preview deployments
 ]
-
-# If FRONTEND_URL has multiple deployment URLs (preview branches), add them
-if ENVIRONMENT == "production":
-    # Add your Vercel domain pattern
-    allowed_origins.append("https://*.vercel.app")
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=allowed_origins,
     allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allow_headers=["Content-Type", "Authorization", "Cookie", "Set-Cookie"],
+    allow_methods=["*"],
+    allow_headers=["*"],
     expose_headers=["Set-Cookie"],
 )
-
 
 # ─── Health ───────────────────────────────────────────────────────────────────
 
