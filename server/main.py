@@ -102,13 +102,14 @@ async def register_user(user: UserRegister, db: AsyncSession = Depends(get_db)):
 
     token = create_access_token({"email": new_user.email})
     response = JSONResponse({"message": "User registered successfully"})
+    is_production = ENVIRONMENT == "production"
     response.set_cookie(
         key="access_token",
         value=token,
         httponly=True,
-        secure=False,
-        samesite="lax",
-        max_age=60 * 60 * 24 * 7,
+        secure=is_production,  
+        samesite="none" if is_production else "lax",  # Cross-domain in production
+        max_age=60 * 60 * 24 * 7,  # 7 days
     )
     return response
 
@@ -123,13 +124,14 @@ async def login_user(user: UserLogin, db: AsyncSession = Depends(get_db)):
 
     token = create_access_token({"email": db_user.email})
     response = JSONResponse({"login": "success"})
+    is_production = ENVIRONMENT == "production"
     response.set_cookie(
         key="access_token",
         value=token,
         httponly=True,
-        secure=False,
-        samesite="lax",
-        max_age=60 * 60 * 24 * 7,
+        secure=is_production,  
+        samesite="none" if is_production else "lax",  # Cross-domain in production
+        max_age=60 * 60 * 24 * 7,  # 7 days
     )
     return response
 
