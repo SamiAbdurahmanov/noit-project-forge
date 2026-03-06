@@ -98,8 +98,7 @@ async def register_user(user: UserRegister, db: AsyncSession = Depends(get_db)):
         secure=True,
         samesite="none",
         path="/",
-        domain=".up.railway.app",  
-        max_age=60 * 60 * 24 * 7,
+        max_age=60 * 60 * 24 * 7
     )
     return response
 
@@ -122,8 +121,7 @@ async def login_user(user: UserLogin, db: AsyncSession = Depends(get_db)):
         secure=True,
         samesite="none",
         path="/",
-        domain=".up.railway.app",   
-        max_age=60 * 60 * 24 * 7,
+        max_age=60 * 60 * 24 * 7
     )
     return response
 
@@ -140,7 +138,7 @@ def logout_alt():
         samesite="none",
         httponly=True,
         path = "/",
-        domain=".up.railway.app" 
+        
     )
 
     

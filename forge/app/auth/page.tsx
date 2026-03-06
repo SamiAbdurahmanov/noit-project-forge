@@ -127,6 +127,7 @@ export default function AuthPage() {
         try {
             const res = await fetch(`${API}/auth/register`, {
                 method: "POST",
+                 mode: "cors", 
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -163,6 +164,7 @@ export default function AuthPage() {
         try {
             const res = await fetch(`${API}/auth/login`, {
                 method: "POST",
+                 mode: "cors", 
                 body: JSON.stringify({ 
                     email: formLoginData.email, 
                     password: formLoginData.password 
