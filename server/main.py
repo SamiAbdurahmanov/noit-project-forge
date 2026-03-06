@@ -69,7 +69,6 @@ app.add_middleware(
     allow_origin_regex=r"https://.*\.vercel\.app",
     allow_methods=["*"],
     allow_headers=["*"],
-    expose_headers=["Set-Cookie"],
 )
 
 # ─── Health ───────────────────────────────────────────────────────────────────
