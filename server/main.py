@@ -76,13 +76,9 @@ app.add_middleware(
 
 @app.get("/")
 async def root():
-    return {"status": "Connected to PostgreSQL!"}
+    return {"status": "Connected!"}
 
 
-@app.get("/users")
-async def get_users(db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(User))
-    return result.scalars().all()
 
 
 # ─── Auth ─────────────────────────────────────────────────────────────────────
@@ -107,8 +103,8 @@ async def register_user(user: UserRegister, db: AsyncSession = Depends(get_db)):
         key="access_token",
         value=token,
         httponly=True,
-        secure=is_production,  
-        samesite="none" if is_production else "lax",  # Cross-domain in production
+        secure=True,  
+        samesite="none",
         max_age=60 * 60 * 24 * 7,  # 7 days
     )
     return response
@@ -129,8 +125,8 @@ async def login_user(user: UserLogin, db: AsyncSession = Depends(get_db)):
         key="access_token",
         value=token,
         httponly=True,
-        secure=is_production,  
-        samesite="none" if is_production else "lax",  # Cross-domain in production
+       secure=True,  
+        samesite="none",  
         max_age=60 * 60 * 24 * 7,  # 7 days
     )
     return response
@@ -144,8 +140,8 @@ def logout_alt():
     response = JSONResponse({"message": "Logout successful"})
     response.delete_cookie(
         key="access_token",
-        secure=is_production,
-        samesite="none" if is_production else "lax",
+        secure=True,  
+        samesite="none",
         httponly=True,
     )
     
@@ -221,7 +217,6 @@ async def confirm_and_save_context(
     """
     current_user = await get_current_user_from_db(user, db)
 
-    # Generate the learning plan with gpt-4o
     plan_dict = await run_in_threadpool(
         generate_learning_plan,
         data.hobby,
