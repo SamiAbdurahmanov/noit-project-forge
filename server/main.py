@@ -58,15 +58,15 @@ app = FastAPI()
 FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
 
 allowed_origins = [
-    "http://localhost:3000",  # Development
-    FRONTEND_URL,  # Production Vercel URL
-    "https://*.vercel.app",  # Allow Vercel preview deployments
+    "http://localhost:3000",
+    FRONTEND_URL,
 ]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=allowed_origins,
     allow_credentials=True,
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_methods=["*"],
     allow_headers=["*"],
     expose_headers=["Set-Cookie"],
