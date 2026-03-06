@@ -57,20 +57,13 @@ app = FastAPI()
 
 FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
 
-allowed_origins = [
-    "http://localhost:3000",
-    FRONTEND_URL,
-]
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=allowed_origins,
+    allow_origins=[FRONTEND_URL],
     allow_credentials=True,
-    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 # ─── Health ───────────────────────────────────────────────────────────────────
 
 @app.get("/")
@@ -102,9 +95,11 @@ async def register_user(user: UserRegister, db: AsyncSession = Depends(get_db)):
         key="access_token",
         value=token,
         httponly=True,
-        secure=True,  
+        secure=True,
         samesite="none",
-        max_age=60 * 60 * 24 * 7,  # 7 days
+        path="/",
+        domain=".up.railway.app",  
+        max_age=60 * 60 * 24 * 7,
     )
     return response
 
@@ -124,9 +119,11 @@ async def login_user(user: UserLogin, db: AsyncSession = Depends(get_db)):
         key="access_token",
         value=token,
         httponly=True,
-       secure=True,  
-        samesite="none",  
-        max_age=60 * 60 * 24 * 7,  # 7 days
+        secure=True,
+        samesite="none",
+        path="/",
+        domain=".up.railway.app",   
+        max_age=60 * 60 * 24 * 7,
     )
     return response
 
@@ -142,7 +139,10 @@ def logout_alt():
         secure=True,  
         samesite="none",
         httponly=True,
+        path = "/",
+        domain=".up.railway.app" 
     )
+
     
     return response
 @app.get("/protected")
