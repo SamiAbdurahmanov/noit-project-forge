@@ -57,7 +57,7 @@ export default function ContextsPage() {
     const [deleteCountdown, setDeleteCountdown] = useState(10);
     const [deleting, setDeleting] = useState(false);
     const [disabling, setDisabling] = useState(false);
-   
+    const token = localStorage.getItem("access_token");
     // Countdown timer — resets every time a new delete target is set
     useEffect(() => {
         if (!deleteTarget) return;
@@ -78,7 +78,7 @@ export default function ContextsPage() {
             setFetchingContexts(true);
             setFetchError(null);
             try {
-                const res = await fetch(`${API}/context/my-contexts`, { credentials: "include" });
+                const res = await fetch(`${API}/context/my-contexts`, { headers: { Authorization: `Bearer ${token}` } });
                 if (!res.ok) throw new Error("Неуспешно зареждане на контекстите");
                 const data: Context[] = await res.json();
                 setContexts(data);
@@ -102,7 +102,7 @@ if (!user) return <Unregistered />;
         try {
             const res = await fetch(`${API}/context/${deleteTarget.id}`, {
                 method: "DELETE",
-                credentials: "include",
+                headers: { Authorization: `Bearer ${token}` },
             });
             if (!res.ok) throw new Error("Неуспешно изтриване");
             setContexts((prev) => prev.filter((ctx) => ctx.id !== deleteTarget.id));
@@ -124,8 +124,10 @@ if (!user) return <Unregistered />;
         try {
             const res = await fetch(`${API}/context/${selectedContext.id}/update`, {
                 method: "PUT",
-                credentials: "include",
-                headers: { "Content-Type": "application/json" },
+                headers: { 
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
                 body: JSON.stringify({
                     original_prompt: updateInput,
                     hobby: selectedContext.hobby,

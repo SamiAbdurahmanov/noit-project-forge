@@ -21,12 +21,12 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 export const UserProvider = ({ children }: UserProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-
+  const token = localStorage.getItem("access_token");
   useEffect(() => {
     const checkAuth = async () => {
       try {
         const res = await fetch(`${API}/protected`, {
-          credentials: "include",
+          headers: { Authorization: `Bearer ${token}` },
         });
 
         if (res.ok) {

@@ -60,7 +60,7 @@ FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[FRONTEND_URL],
-    allow_credentials=True,
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -89,18 +89,7 @@ async def register_user(user: UserRegister, db: AsyncSession = Depends(get_db)):
     await db.commit()
 
     token = create_access_token({"email": new_user.email})
-    response = JSONResponse({"message": "User registered successfully"})
-    is_production = ENVIRONMENT == "production"
-    response.set_cookie(
-        key="access_token",
-        value=token,
-        httponly=True,
-        secure=True,
-        samesite="none",
-        path="/",
-        max_age=60 * 60 * 24 * 7
-    )
-    return response
+    return JSONResponse({"register": "success", "access_token": token, "token_type": "bearer"})
 
 
 @app.post("/auth/login")
@@ -112,37 +101,13 @@ async def login_user(user: UserLogin, db: AsyncSession = Depends(get_db)):
         raise HTTPException(401, "Invalid credentials")
 
     token = create_access_token({"email": db_user.email})
-    response = JSONResponse({"login": "success"})
-    is_production = ENVIRONMENT == "production"
-    response.set_cookie(
-        key="access_token",
-        value=token,
-        httponly=True,
-        secure=True,
-        samesite="none",
-        path="/",
-        max_age=60 * 60 * 24 * 7
-    )
-    return response
-
+    # Return token in body instead of cookie
+    return JSONResponse({"login": "success", "access_token": token, "token_type": "bearer"})
 
 @app.post("/auth/logout")
-def logout_alt():
-    
-    is_production = os.getenv("ENVIRONMENT") == "production"
-    
-    response = JSONResponse({"message": "Logout successful"})
-    response.delete_cookie(
-        key="access_token",
-        secure=True,  
-        samesite="none",
-        httponly=True,
-        path = "/",
-        
-    )
+def logout():
+    return JSONResponse({"message": "Logout successful"})
 
-    
-    return response
 @app.get("/protected")
 def protected_route(user=Depends(get_current_user)):
     return {"message": f"Welcome {user['email']}!"}

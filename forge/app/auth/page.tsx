@@ -127,11 +127,9 @@ export default function AuthPage() {
         try {
             const res = await fetch(`${API}/auth/register`, {
                 method: "POST",
-                 mode: "cors", 
                 headers: {
                     "Content-Type": "application/json",
                 },
-                credentials: "include",
                 body: JSON.stringify({
                     email: formRegisterData.email,
                     password: formRegisterData.password,
@@ -139,7 +137,7 @@ export default function AuthPage() {
             });
 
             const data = await res.json();
-
+            localStorage.setItem("access_token", data.access_token);
             if (res.ok) {
                 window.location.href = "/";
             } else {
@@ -164,19 +162,18 @@ export default function AuthPage() {
         try {
             const res = await fetch(`${API}/auth/login`, {
                 method: "POST",
-                 mode: "cors", 
                 body: JSON.stringify({ 
                     email: formLoginData.email, 
                     password: formLoginData.password 
                 }),
                 headers: { "Content-Type": "application/json" },
-                credentials: "include",
             });
 
             if (res.ok) {
                 window.location.href = "/";
             } else {
                 const data = await res.json();
+                localStorage.setItem("access_token", data.access_token);
                 setLoginErrors(prev => ({
                     ...prev,
                     email: data.message || "Невалиден имейл или парола",

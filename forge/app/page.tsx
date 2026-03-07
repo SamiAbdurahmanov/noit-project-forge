@@ -13,7 +13,7 @@ export default function ForgeLanding() {
 
 
   const [checkingContexts, setCheckingContexts] = useState(false);
-
+  const token = localStorage.getItem("access_token");
   useEffect(() => {
    
     if (isLoading) return;
@@ -30,7 +30,7 @@ export default function ForgeLanding() {
     async function checkContexts() {
       try {
         const res = await fetch(`${API}/context/my-contexts`, {
-          credentials: "include",
+          headers: { Authorization: `Bearer ${token}` },
         });
 
         if (!res.ok) {

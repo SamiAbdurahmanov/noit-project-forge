@@ -256,6 +256,7 @@ export default function ContextPage() {
     const [expandedSchedules, setExpandedSchedules] = useState<Record<string, string>>({});
     const [loadingStep, setLoadingStep] = useState<string | null>(null);
     const { id } = useParams<{ id: string }>();
+    const token = localStorage.getItem("access_token");
     // ── Fetch context ──────────────────────────────────────────────────────────
     useEffect(() => {
         if (!id) return;
@@ -266,7 +267,7 @@ export default function ContextPage() {
 
             try {
                 const res = await fetch(`${API}/context/${id}`, {
-                    credentials: "include",
+                    headers: { Authorization: `Bearer ${token}` },
                 });
 
                 if (!res.ok) {
@@ -305,8 +306,10 @@ export default function ContextPage() {
         try {
             const res = await fetch(`${API}/context/${ctx.id}/analyze`, {
                 method: "POST",
-                credentials: "include",
-                headers: { "Content-Type": "application/json" },
+                headers: { 
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
                 body: JSON.stringify({
                     user_image_b64: myFile.b64,
                     reference_image_b64: refFile.b64,
@@ -435,7 +438,7 @@ export default function ContextPage() {
                             onClick={async () => {
                                 const res = await fetch(`${API}/context/${ctx.id}/regenerate-plan`, {
                                     method: "POST",
-                                    credentials: "include",
+                                    headers: { Authorization: `Bearer ${token}` }
                                 });
                                 if (res.ok) {
                                     const updated: Context = await res.json();
@@ -620,8 +623,10 @@ export default function ContextPage() {
                                                                                         setLoadingStep(stepKey);
                                                                                         const res = await fetch(`${API}/context/${ctx.id}/step-details`, {
                                                                                             method: "POST",
-                                                                                            credentials: "include",
-                                                                                            headers: { "Content-Type": "application/json" },
+                                                                                            headers: { 
+                                                                                                "Content-Type": "application/json",
+                                                                                                Authorization: `Bearer ${token}`
+                                                                                            },
                                                                                             body: JSON.stringify({
                                                                                                 phase_title: phase.title,
                                                                                                 step_title: step.title,

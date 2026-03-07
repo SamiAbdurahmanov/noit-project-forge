@@ -10,13 +10,8 @@ export default function Navigation() {
     const { user } = useUser();
     const router = useRouter();
     const handleLogout = async (e: React.FormEvent) => {
-        e.preventDefault();
-        await fetch(`${API}/auth/logout`, {
-            method: "POST",
-            credentials: "include",
-        });
-        router.push("/");
-        window.location.reload();
+        localStorage.removeItem("access_token");
+        window.location.href = "/";
     };
     return (
         <>

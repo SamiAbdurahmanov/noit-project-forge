@@ -50,7 +50,7 @@ export default function ForgeNewContextPage() {
     if (!user) {
         return <Unregistered />;
     }
-
+    const token = localStorage.getItem("access_token");
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError(null);
@@ -77,9 +77,10 @@ export default function ForgeNewContextPage() {
         try {
             const res = await fetch(`${API}/context/create`, {
                 method: "POST",
-                credentials: "include",
+               
                 headers: {
                     "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
                 },
                 body: JSON.stringify({ user_input: input }),
             });
@@ -129,9 +130,9 @@ export default function ForgeNewContextPage() {
         try {
             const res = await fetch(`${API}/context/confirm`, {
                 method: "POST",
-                credentials: "include",
                 headers: {
                     "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
                 },
                 body: JSON.stringify({
 

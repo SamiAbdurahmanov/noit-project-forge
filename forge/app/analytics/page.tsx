@@ -17,13 +17,13 @@ export default function AnalyticsPage() {
     const [overview, setOverview] = useState<any>(null);
     const [selectedContext, setSelectedContext] = useState<number | null>(null);
     const [contextData, setContextData] = useState<any>(null);
-
+    const token = localStorage.getItem("access_token");
     useEffect(() => {
         if (!user) return;
         const fetchOverview = async () => {
             setLoading(true);
             try {
-                const res = await fetch(`${API}/analytics/overview`, { credentials: "include" });
+                const res = await fetch(`${API}/analytics/overview`, {headers: { Authorization: `Bearer ${token}` }});
                 if (!res.ok) throw new Error("Failed to fetch");
                 const data = await res.json();
                 setOverview(data);
@@ -43,7 +43,7 @@ export default function AnalyticsPage() {
         if (!selectedContext) return;
         const fetchContext = async () => {
             try {
-                const res = await fetch(`${API}/analytics/context/${selectedContext}`, { credentials: "include" });
+                const res = await fetch(`${API}/analytics/context/${selectedContext}`, { headers: { Authorization: `Bearer ${token}` } });
                 if (!res.ok) throw new Error("Failed");
                 const data = await res.json();
                 setContextData(data);
