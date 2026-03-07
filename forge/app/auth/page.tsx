@@ -169,12 +169,12 @@ export default function AuthPage() {
                 }),
                 headers: { "Content-Type": "application/json" },
             });
-
+            const data = await res.json();
+            setToken(data.access_token);
             if (res.ok) {
                 window.location.href = "/";
             } else {
                 const data = await res.json();
-                setToken(data.access_token);
                 setLoginErrors(prev => ({
                     ...prev,
                     email: data.message || "Невалиден имейл или парола",
