@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { withAuth } from "@/src/withAuth";
+import { getToken } from "@/src/lib/authHelper";
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
@@ -57,7 +58,7 @@ export default function ContextsPage() {
     const [deleteCountdown, setDeleteCountdown] = useState(10);
     const [deleting, setDeleting] = useState(false);
     const [disabling, setDisabling] = useState(false);
-    const token = localStorage.getItem("access_token");
+    const token = getToken();
     // Countdown timer — resets every time a new delete target is set
     useEffect(() => {
         if (!deleteTarget) return;

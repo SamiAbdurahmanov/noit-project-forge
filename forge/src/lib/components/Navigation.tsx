@@ -4,13 +4,14 @@ import Link from "next/link";
 import { Flame, Sparkles, Menu, X, ArrowRight } from "lucide-react";
 import { useUser } from "@/context/UserContext";
 import { useRouter } from "next/navigation";
+import { removeToken } from "../authHelper";
 const API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 export default function Navigation() {
     const [isOpen, setIsOpen] = useState(false);
     const { user } = useUser();
     const router = useRouter();
     const handleLogout = async (e: React.FormEvent) => {
-        localStorage.removeItem("access_token");
+        removeToken();
         window.location.href = "/";
     };
     return (

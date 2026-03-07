@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import Link from "next/link";
 import { withAuth } from "@/src/withAuth";
+import { getToken } from "@/src/lib/authHelper";
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
@@ -17,7 +18,7 @@ export default function AnalyticsPage() {
     const [overview, setOverview] = useState<any>(null);
     const [selectedContext, setSelectedContext] = useState<number | null>(null);
     const [contextData, setContextData] = useState<any>(null);
-    const token = localStorage.getItem("access_token");
+    const token = getToken();
     useEffect(() => {
         if (!user) return;
         const fetchOverview = async () => {

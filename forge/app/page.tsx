@@ -5,6 +5,7 @@ import { useUser } from '@/context/UserContext';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import LoadingScreen from '@/src/lib/components/LoadingScreen';
+import { getToken } from '@/src/lib/authHelper';
 const API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 export default function ForgeLanding() {
   const [isHovering, setIsHovering] = useState(false);
@@ -13,7 +14,7 @@ export default function ForgeLanding() {
 
 
   const [checkingContexts, setCheckingContexts] = useState(false);
-  const token = localStorage.getItem("access_token");
+  const token = getToken ();
   useEffect(() => {
    
     if (isLoading) return;

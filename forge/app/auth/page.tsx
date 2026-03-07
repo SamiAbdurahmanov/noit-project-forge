@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import GuestOnly from "@/src/lib/components/GuestOnly";
+import { setToken } from "@/src/lib/authHelper";
 
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
@@ -137,7 +138,7 @@ export default function AuthPage() {
             });
 
             const data = await res.json();
-            localStorage.setItem("access_token", data.access_token);
+            setToken(data.access_token);
             if (res.ok) {
                 window.location.href = "/";
             } else {
@@ -173,7 +174,7 @@ export default function AuthPage() {
                 window.location.href = "/";
             } else {
                 const data = await res.json();
-                localStorage.setItem("access_token", data.access_token);
+                setToken(data.access_token);
                 setLoginErrors(prev => ({
                     ...prev,
                     email: data.message || "Невалиден имейл или парола",

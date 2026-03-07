@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { withAuth } from "@/src/withAuth";
+import { getToken } from "@/src/lib/authHelper";
 
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
@@ -256,7 +257,7 @@ export default function ContextPage() {
     const [expandedSchedules, setExpandedSchedules] = useState<Record<string, string>>({});
     const [loadingStep, setLoadingStep] = useState<string | null>(null);
     const { id } = useParams<{ id: string }>();
-    const token = localStorage.getItem("access_token");
+    const token = getToken();
     // ── Fetch context ──────────────────────────────────────────────────────────
     useEffect(() => {
         if (!id) return;

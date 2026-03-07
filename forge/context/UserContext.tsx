@@ -1,5 +1,6 @@
 "use client";
 
+import { getToken } from "@/src/lib/authHelper";
 import { createContext, useContext, useState, useEffect, ReactNode, Dispatch, SetStateAction } from "react";
 const API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 interface User {
@@ -21,7 +22,7 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 export const UserProvider = ({ children }: UserProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const token = localStorage.getItem("access_token");
+  const token = getToken();
   useEffect(() => {
     const checkAuth = async () => {
       try {
