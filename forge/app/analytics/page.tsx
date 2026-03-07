@@ -24,7 +24,7 @@ export default function AnalyticsPage() {
         const fetchOverview = async () => {
             setLoading(true);
             try {
-                const res = await fetch(`${API}/analytics/overview`, {headers: { Authorization: `Bearer ${token}` }});
+                const res = await fetch(`${API}/analytics/overview`, {headers: { 'Authorization': `Bearer ${token}` }});
                 if (!res.ok) throw new Error("Failed to fetch");
                 const data = await res.json();
                 setOverview(data);
@@ -44,7 +44,7 @@ export default function AnalyticsPage() {
         if (!selectedContext) return;
         const fetchContext = async () => {
             try {
-                const res = await fetch(`${API}/analytics/context/${selectedContext}`, { headers: { Authorization: `Bearer ${token}` } });
+                const res = await fetch(`${API}/analytics/context/${selectedContext}`, { headers: { 'Authorization': `Bearer ${token}` } });
                 if (!res.ok) throw new Error("Failed");
                 const data = await res.json();
                 setContextData(data);

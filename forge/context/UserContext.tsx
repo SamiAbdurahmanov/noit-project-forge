@@ -27,7 +27,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
     const checkAuth = async () => {
       try {
         const res = await fetch(`${API}/protected`, {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: { "Authorization": `Bearer ${token}` },
         });
 
         if (res.ok) {

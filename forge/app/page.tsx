@@ -31,7 +31,7 @@ export default function ForgeLanding() {
     async function checkContexts() {
       try {
         const res = await fetch(`${API}/context/my-contexts`, {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: { "Authorization": `Bearer ${token}` },
         });
 
         if (!res.ok) {

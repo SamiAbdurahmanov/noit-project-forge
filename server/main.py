@@ -62,7 +62,7 @@ app.add_middleware(
     allow_origins=[FRONTEND_URL],
     allow_credentials=False,
     allow_methods=["*"],
-    allow_headers=["*"],
+    allow_headers=["*", "Authorization"], 
 )
 # ─── Health ───────────────────────────────────────────────────────────────────
 

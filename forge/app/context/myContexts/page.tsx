@@ -79,7 +79,7 @@ export default function ContextsPage() {
             setFetchingContexts(true);
             setFetchError(null);
             try {
-                const res = await fetch(`${API}/context/my-contexts`, { headers: { Authorization: `Bearer ${token}` } });
+                const res = await fetch(`${API}/context/my-contexts`, { headers: { "Authorization": `Bearer ${token}` } });
                 if (!res.ok) throw new Error("Неуспешно зареждане на контекстите");
                 const data: Context[] = await res.json();
                 setContexts(data);
@@ -103,7 +103,7 @@ if (!user) return <Unregistered />;
         try {
             const res = await fetch(`${API}/context/${deleteTarget.id}`, {
                 method: "DELETE",
-                headers: { Authorization: `Bearer ${token}` },
+                headers: { "Authorization": `Bearer ${token}` },
             });
             if (!res.ok) throw new Error("Неуспешно изтриване");
             setContexts((prev) => prev.filter((ctx) => ctx.id !== deleteTarget.id));
@@ -127,7 +127,7 @@ if (!user) return <Unregistered />;
                 method: "PUT",
                 headers: { 
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`
+                    "Authorization": `Bearer ${token}`
                 },
                 body: JSON.stringify({
                     original_prompt: updateInput,

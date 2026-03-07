@@ -268,7 +268,7 @@ export default function ContextPage() {
 
             try {
                 const res = await fetch(`${API}/context/${id}`, {
-                    headers: { Authorization: `Bearer ${token}` },
+                    headers: { "Authorization": `Bearer ${token}` },
                 });
 
                 if (!res.ok) {
@@ -309,7 +309,7 @@ export default function ContextPage() {
                 method: "POST",
                 headers: { 
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`
+                    "Authorization": `Bearer ${token}`
                 },
                 body: JSON.stringify({
                     user_image_b64: myFile.b64,
@@ -439,7 +439,7 @@ export default function ContextPage() {
                             onClick={async () => {
                                 const res = await fetch(`${API}/context/${ctx.id}/regenerate-plan`, {
                                     method: "POST",
-                                    headers: { Authorization: `Bearer ${token}` }
+                                    headers: {'Authorization': `Bearer ${token}` }
                                 });
                                 if (res.ok) {
                                     const updated: Context = await res.json();
@@ -626,7 +626,7 @@ export default function ContextPage() {
                                                                                             method: "POST",
                                                                                             headers: { 
                                                                                                 "Content-Type": "application/json",
-                                                                                                Authorization: `Bearer ${token}`
+                                                                                                'Authorization': `Bearer ${token}`
                                                                                             },
                                                                                             body: JSON.stringify({
                                                                                                 phase_title: phase.title,
